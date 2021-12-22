@@ -2,7 +2,6 @@
 import os
 import sys
 import time
-from math import exp
 
 import requests
 from concurrent import futures
@@ -11,7 +10,7 @@ POP20_CC = ('CN', 'IN', 'US', 'ID', 'BR', 'PK', 'NG', 'BD', 'RU', 'JP',
             'MX', 'PH', 'VN', 'ET', 'EG', 'DE', 'IR', 'TR', 'CD', 'FR')
 url = 'http://flupy.org/data/flags'
 Max_workers = 20
-dest_dir = "./Pictures3"
+dest_dir = "./Pictures2"
 
 
 def save_fig(img, filename):
@@ -38,8 +37,18 @@ def download_pic(cc):
 
 
 def downloads(cc_list):
-    with futures.ProcessPoolExecutor() as executor:
-        res = executor.map(download_pic, sorted(cc_list))
+    with futures.ThreadPoolExecutor(Max_workers) as executor:
+        to_do = []
+        for i in cc_list:
+            future = executor.submit(download_pic, i)
+            to_do.append(future)
+            print(f"Scheduled for {i}:{future}")
+
+        results = []
+        for future in futures.as_completed(to_do):
+            result = f"{future} result is {future.result()!r}"
+            print(result)
+            results.append(result)
     return len(cc_list)
 
 
@@ -49,17 +58,6 @@ def main():
     haoshi = time.time() - t0
     print(f"\n{count} flag spend {haoshi} seconds")
 
-def pow2(a):
-    return pow(2, a)
-
-
 
 if __name__ == '__main__':
-    # main()
-    need = [(100, 2), (3, 4)]
-    print(type(sorted((1, 2))))
-    with futures.ThreadPoolExecutor(max_workers=2) as executor:
-        future = executor.submit(pow, 323, 1235)
-        print(type(future))
-        future2 = executor.map(pow, *need)
-        print(type(next(future2)))
+    main()
