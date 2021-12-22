@@ -4,13 +4,13 @@ import sys
 import time
 
 import requests
-from concurrent import futures
 
 POP20_CC = ('CN', 'IN', 'US', 'ID', 'BR', 'PK', 'NG', 'BD', 'RU', 'JP',
             'MX', 'PH', 'VN', 'ET', 'EG', 'DE', 'IR', 'TR', 'CD', 'FR')
+
 url = 'http://flupy.org/data/flags'
-Max_workers = 20
-dest_dir = "./Pictures3"
+
+dest_dir = "./Pictures"
 
 
 def save_fig(img, filename):
@@ -30,21 +30,17 @@ def show(text):
     sys.stdout.flush()
 
 
-def download_pic(cc):
-    img = get_flag(cc).content
-    show(cc)
-    save_fig(img, f"{cc.lower()}.gif")
-
-
-def downloads(cc_list):
-    with futures.ProcessPoolExecutor() as executor:
-        res = executor.map(download_pic, sorted(cc_list))
+def download_pic(cc_list):
+    for cc in cc_list:
+        img = get_flag(cc).content
+        show(cc)
+        save_fig(img, f"{cc.lower()}.gif")
     return len(cc_list)
 
 
 def main():
     t0 = time.time()
-    count = downloads(POP20_CC)
+    count = download_pic(POP20_CC)
     haoshi = time.time() - t0
     print(f"\n{count} flag spend {haoshi} seconds")
 

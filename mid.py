@@ -10,7 +10,7 @@ POP20_CC = ('CN', 'IN', 'US', 'ID', 'BR', 'PK', 'NG', 'BD', 'RU', 'JP',
             'MX', 'PH', 'VN', 'ET', 'EG', 'DE', 'IR', 'TR', 'CD', 'FR')
 url = 'http://flupy.org/data/flags'
 Max_workers = 20
-dest_dir = "./Pictures3"
+dest_dir = "./Pictures2"
 
 
 def save_fig(img, filename):
@@ -37,7 +37,7 @@ def download_pic(cc):
 
 
 def downloads(cc_list):
-    with futures.ProcessPoolExecutor() as executor:
+    with futures.ThreadPoolExecutor(Max_workers) as executor:
         res = executor.map(download_pic, sorted(cc_list))
     return len(cc_list)
 
