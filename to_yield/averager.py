@@ -1,4 +1,5 @@
 from inspect import getgeneratorstate
+from decorate import decoration
 
 
 def nm(func):
@@ -8,10 +9,15 @@ def nm(func):
 
 
 @nm
-def add_a(a, b):
+def add_value(a, b):
+    """
+
+    :type b: object
+    """
     return (a * b) ** b
 
 
+@decoration
 def get_avarager():
     total = 0
     count = 0
@@ -24,9 +30,8 @@ def get_avarager():
 
 
 if __name__ == '__main__':
-    add_a(6, 21)
+    add_value(6, 10)
     target = get_avarager()
-    next(target)
     print(target.send(10))
     print(target.send(11))
     print(target.send(100))
