@@ -45,8 +45,7 @@ class Promotion(ABC):
     @abstractmethod
     def discount(self):
         pass
-
-
+ 
 class FidelityPromo(Promotion):
 
     def discount(self, order):
