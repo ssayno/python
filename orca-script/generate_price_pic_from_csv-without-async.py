@@ -20,18 +20,18 @@ def get_price_from_single_csv(csv_file_path):
 
 
 def generate_from_dir(dir_path):
-    prcies_dict = {}
+    prices_dict = {}
     for file_ in os.listdir(dir_path):
         if file_.startswith('.') or not file_.endswith('.csv'):
             continue
         csv_file_path = os.path.join(dir_path, file_)
         prices = get_price_from_single_csv(csv_file_path)
         for price in prices:
-            if price in prcies_dict:
-                prcies_dict[price] += 1
+            if price in prices_dict:
+                prices_dict[price] += 1
             else:
-                prcies_dict[price] = 1
-    sorted_data = dict(sorted(prcies_dict.items(), key=lambda x: x[0]))
+                prices_dict[price] = 1
+    sorted_data = dict(sorted(prices_dict.items(), key=lambda x: x[0]))
     x_data = sorted_data.keys()
     y_data = sorted_data.values()
     plt.xlabel("Price")
